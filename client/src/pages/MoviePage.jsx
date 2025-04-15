@@ -46,7 +46,7 @@ const MoviePage = () => {
     return (
       <div className="container">
         <div className="error-container">
-          <h1>Oops! Algo deu errado</h1>
+          <h1>Ocorreu um erro</h1>
           <p>{error}</p>
           <a href="/" className="error-button">Voltar para a página inicial</a>
         </div>

@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import Comments from './Comments';
 
 const MovieDetails = ({ movie }) => {
-  // Placeholder para quando um filme não tem poster
   const fallbackImage = '/no-poster.jpg';
   
   return (

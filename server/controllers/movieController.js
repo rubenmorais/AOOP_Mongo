@@ -1,6 +1,5 @@
 import Movie from '../models/Movie.js';
 
-// Buscar todos os filmes (com paginação)
 export const getAllMovies = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -27,7 +26,6 @@ export const getAllMovies = async (req, res) => {
   }
 };
 
-// Buscar detalhes de um filme específico
 export const getMovieDetails = async (req, res) => {
   try {
     const movie = await Movie.findById(req.params.id);
@@ -43,7 +41,6 @@ export const getMovieDetails = async (req, res) => {
   }
 };
 
-// Buscar filmes por título (para funcionalidade de pesquisa)
 export const searchMovies = async (req, res) => {
   try {
     const searchTerm = req.query.title;

@@ -44,7 +44,7 @@ const Home = () => {
     };
     
     fetchMovies();
-  }, [currentPage, searchTerm]);
+  }, [currentPage, location.search]);
   
   const handlePageChange = (page) => {
     setCurrentPage(page);

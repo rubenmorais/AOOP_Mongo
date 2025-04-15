@@ -107,7 +107,7 @@ a {
 
 .movie-image {
   height: 0;
-  padding-bottom: 150%; /* Aspect ratio 2:3 */
+  padding-bottom: 150%;
   position: relative;
   overflow: hidden;
 }

@@ -1,4 +1,3 @@
-// client/src/components/Comments.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -45,10 +44,8 @@ const Comments = ({ movieId }) => {
       setLoading(true);
       const response = await axios.post(`/api/movies/${movieId}/comments`, newComment);
       
-      // Adicionar o novo comentário no topo da lista
-      setComments([response.data, ...comments]);
+      setComments((prevComments) => [response.data, ...prevComments]);
       
-      // Limpar o formulário
       setNewComment({
         username: '',
         content: '',
@@ -64,7 +61,6 @@ const Comments = ({ movieId }) => {
     }
   };
 
-  // Função para exibir estrelas com base na classificação
   const renderStars = (rating) => {
     return Array(5).fill(0).map((_, index) => (
       <span key={index} className={index < rating ? "star filled" : "star"}>
@@ -143,17 +139,17 @@ const Comments = ({ movieId }) => {
           comments.map((comment) => (
             <div key={comment._id} className="comment">
               <div className="comment-header">
-                <span className="comment-author">{comment.username}</span>
+                <span className="comment-author">{comment.username || comment.name}</span>
                 <span className="comment-date">
-                  {new Date(comment.createdAt).toLocaleDateString('pt-BR')}
+                  {new Date(comment.createdAt || comment.date).toLocaleDateString('pt-BR')}
                 </span>
               </div>
               <div className="comment-rating">
                 {renderStars(comment.rating)}
               </div>
-              <p className="comment-content">{comment.content}</p>
+              <p className="comment-content">{comment.content || comment.text}</p>
             </div>
-          ))
+          ))          
         )}
       </div>
     </div>

@@ -1,44 +1,59 @@
-// server/controllers/commentController.js
-import Comment from '../models/Comment.js';
+import Comment from '../models/Comment.js';  
+import mongoose from 'mongoose';
 
-// Buscar comentários para um filme específico
+
 export const getMovieComments = async (req, res) => {
   try {
     const { movieId } = req.params;
     
-    const comments = await Comment.find({ movieId })
-      .sort({ createdAt: -1 });
-    
+    if (!mongoose.Types.ObjectId.isValid(movieId)) {
+      return res.status(400).json({ error: 'ID de filme inválido' });
+    }
+
+    const comments = await Comment.find({ movie_id: movieId }).sort({ date: -1 });
+   
     res.json({ comments });
   } catch (err) {
     console.error('Erro ao buscar comentários:', err);
-    res.status(500).json({ error: 'Erro ao buscar comentários' });
+    res.status(500).json({ error: 'Falha ao buscar comentários' });
   }
 };
 
-// Adicionar um comentário a um filme
 export const addComment = async (req, res) => {
   try {
     const { movieId } = req.params;
     const { username, content, rating } = req.body;
     
-    // Validação básica
-    if (!username || !content || !rating) {
-      return res.status(400).json({ error: 'Todos os campos são obrigatórios' });
+    if (!username || !content) {
+      return res.status(400).json({ error: 'Nome e texto do comentário são obrigatórios' });
+    }
+    
+    if (!mongoose.Types.ObjectId.isValid(movieId)) {
+      return res.status(400).json({ error: 'ID de filme inválido' });
     }
     
     const newComment = new Comment({
-      movieId,
-      username,
-      content,
-      rating: Number(rating)
+      name: username,
+      movie_id: movieId,
+      text: content,
+      date: new Date(),
+      rating: Number(rating) || 5 
     });
     
-    await newComment.save();
+    const savedComment = await newComment.save();
     
-    res.status(201).json(newComment);
+    res.status(201).json({
+      _id: savedComment._id,
+      movieId: savedComment.movie_id,
+      username: savedComment.name,
+      content: savedComment.text,
+      rating: savedComment.rating,
+      createdAt: savedComment.date
+    });
+    
+    console.log(`Novo comentário adicionado para o filme ${movieId}`);
   } catch (err) {
     console.error('Erro ao adicionar comentário:', err);
-    res.status(500).json({ error: 'Erro ao adicionar comentário' });
+    res.status(500).json({ error: 'Falha ao adicionar comentário' });
   }
 };

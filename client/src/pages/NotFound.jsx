@@ -6,7 +6,7 @@ const NotFound = () => {
     <div className="container">
       <div className="error-container">
         <h1>404 - Página não encontrada</h1>
-        <p>A página que você está a procura não existe.</p>
+        <p>A página procura não existe.</p>
         <Link to="/" className="error-button">Voltar para a página inicial</Link>
       </div>
     </div>
