@@ -1,6 +1,6 @@
 import express from 'express';
 import { getAllMovies, getMovieDetails, searchMovies } from '../controllers/movieController.js';
-import { getMovieComments, addComment } from '../controllers/commentController.js';
+import { getMovieComments, addComment, updateComment, deleteComment } from '../controllers/commentController.js';
 
 const router = express.Router();
 
@@ -10,5 +10,7 @@ router.get('/movies/:id', getMovieDetails);
 
 router.get('/movies/:movieId/comments', getMovieComments);
 router.post('/movies/:movieId/comments', addComment);
+router.put('/comments/:commentId', updateComment);
+router.delete('/comments/:commentId', deleteComment);
 
 export default router;

@@ -10,29 +10,42 @@ const Comments = ({ movieId }) => {
     content: '',
     rating: 5
   });
+  const [editingComment, setEditingComment] = useState(null);
+  const [editFormData, setEditFormData] = useState({
+    content: '',
+    rating: 5
+  });
 
   useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/movies/${movieId}/comments`);
-        setComments(response.data.comments);
-        setError(null);
-      } catch (err) {
-        console.error('Erro ao buscar comentários:', err);
-        setError('Falha ao carregar comentários. Por favor, tente novamente.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchComments();
   }, [movieId]);
+
+  const fetchComments = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/movies/${movieId}/comments`);
+      setComments(response.data.comments);
+      setError(null);
+    } catch (err) {
+      console.error('Erro ao buscar comentários:', err);
+      setError('Falha ao carregar comentários. Por favor, tente novamente.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewComment({
       ...newComment,
+      [name]: value
+    });
+  };
+
+  const handleEditInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditFormData({
+      ...editFormData,
       [name]: value
     });
   };
@@ -59,6 +72,73 @@ const Comments = ({ movieId }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!editingComment) return;
+    
+    try {
+      setLoading(true);
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/comments/${editingComment._id}`, 
+        editFormData
+      );
+      
+      setComments((prevComments) => 
+        prevComments.map((comment) => 
+          comment._id === editingComment._id 
+            ? { ...comment, text: response.data.content, rating: response.data.rating } 
+            : comment
+        )
+      );
+      
+      setEditingComment(null);
+      setEditFormData({ content: '', rating: 5 });
+      
+      setError(null);
+    } catch (err) {
+      console.error('Erro ao editar comentário:', err);
+      setError('Falha ao editar comentário. Por favor, tente novamente.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    if (!window.confirm('Tem certeza que deseja apagar este comentário?')) {
+      return;
+    }
+    
+    try {
+      setLoading(true);
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/comments/${commentId}`);
+      
+      setComments((prevComments) => 
+        prevComments.filter((comment) => comment._id !== commentId)
+      );
+      
+      setError(null);
+    } catch (err) {
+      console.error('Erro ao apagar comentário:', err);
+      setError('Falha ao apagar comentário. Por favor, tente novamente.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const startEditing = (comment) => {
+    setEditingComment(comment);
+    setEditFormData({
+      content: comment.text,
+      rating: comment.rating
+    });
+  };
+
+  const cancelEditing = () => {
+    setEditingComment(null);
+    setEditFormData({ content: '', rating: 5 });
   };
 
   const renderStars = (rating) => {
@@ -125,6 +205,55 @@ const Comments = ({ movieId }) => {
 
       {error && <div className="error-message">{error}</div>}
 
+      {/* Formulário para editar comentário */}
+      {editingComment && (
+        <form className="comment-form edit-form" onSubmit={handleEditSubmit}>
+          <h3>Editar Comentário</h3>
+          
+          <div className="form-group">
+            <label htmlFor="edit-rating">Classificação:</label>
+            <select
+              id="edit-rating"
+              name="rating"
+              value={editFormData.rating}
+              onChange={handleEditInputChange}
+              required
+            >
+              <option value="5">5 - Excelente</option>
+              <option value="4">4 - Muito Bom</option>
+              <option value="3">3 - Bom</option>
+              <option value="2">2 - Regular</option>
+              <option value="1">1 - Mau</option>
+            </select>
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="edit-content">Comentário:</label>
+            <textarea
+              id="edit-content"
+              name="content"
+              value={editFormData.content}
+              onChange={handleEditInputChange}
+              rows="4"
+              required
+            ></textarea>
+          </div>
+          
+          <div className="edit-buttons">
+            <button type="submit" className="comment-button">
+              Salvar Alterações
+            </button>
+            <button 
+              type="button" 
+              className="comment-button cancel-button"
+              onClick={cancelEditing}
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
+      )}
+
       {/* Lista de comentários */}
       <div className="comments-list">
         <h3>Comentários</h3>
@@ -148,6 +277,25 @@ const Comments = ({ movieId }) => {
                 {renderStars(comment.rating)}
               </div>
               <p className="comment-content">{comment.content || comment.text}</p>
+              
+              {comment.isNew && (
+                <div className="comment-actions">
+                  <button 
+                    className="action-button edit-button"
+                    onClick={() => startEditing(comment)}
+                    disabled={editingComment !== null}
+                  >
+                    Editar
+                  </button>
+                  <button 
+                    className="action-button delete-button"
+                    onClick={() => handleDeleteComment(comment._id)}
+                    disabled={editingComment !== null}
+                  >
+                    Excluir
+                  </button>
+                </div>
+              )}
             </div>
           ))          
         )}

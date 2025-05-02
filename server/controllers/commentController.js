@@ -37,7 +37,8 @@ export const addComment = async (req, res) => {
       movie_id: movieId,
       text: content,
       date: new Date(),
-      rating: Number(rating) || 5 
+      rating: Number(rating) || 5,
+      isNew: true
     });
     
     const savedComment = await newComment.save();
@@ -48,12 +49,83 @@ export const addComment = async (req, res) => {
       username: savedComment.name,
       content: savedComment.text,
       rating: savedComment.rating,
-      createdAt: savedComment.date
+      createdAt: savedComment.date,
+      isNew: savedComment.isNew
     });
     
     console.log(`Novo comentário adicionado para o filme ${movieId}`);
   } catch (err) {
     console.error('Erro ao adicionar comentário:', err);
     res.status(500).json({ error: 'Falha ao adicionar comentário' });
+  }
+};
+export const updateComment = async (req, res) => {
+  try {
+    const { commentId } = req.params;
+    const { content, rating } = req.body;
+    
+    if (!mongoose.Types.ObjectId.isValid(commentId)) {
+      return res.status(400).json({ error: 'ID de comentário inválido' });
+    }
+    
+    const comment = await Comment.findById(commentId);
+    
+    if (!comment) {
+      return res.status(404).json({ error: 'Comentário não encontrado' });
+    }
+    
+    if (!comment.isNew) {
+      return res.status(403).json({ error: 'Apenas comentários novos podem ser editados' });
+    }
+    
+    const updatedComment = await Comment.findByIdAndUpdate(
+      commentId,
+      { text: content, rating: Number(rating) || 5 },
+      { new: true }
+    );
+    
+    res.json({
+      _id: updatedComment._id,
+      movieId: updatedComment.movie_id,
+      username: updatedComment.name,
+      content: updatedComment.text,
+      rating: updatedComment.rating,
+      createdAt: updatedComment.date,
+      isNew: updatedComment.isNew
+    });
+    
+    console.log(`Comentário ${commentId} atualizado`);
+  } catch (err) {
+    console.error('Erro ao atualizar comentário:', err);
+    res.status(500).json({ error: 'Falha ao atualizar comentário' });
+  }
+};
+
+export const deleteComment = async (req, res) => {
+  try {
+    const { commentId } = req.params;
+    
+    if (!mongoose.Types.ObjectId.isValid(commentId)) {
+      return res.status(400).json({ error: 'ID de comentário inválido' });
+    }
+    
+    const comment = await Comment.findById(commentId);
+    
+    if (!comment) {
+      return res.status(404).json({ error: 'Comentário não encontrado' });
+    }
+    
+    if (!comment.isNew) {
+      return res.status(403).json({ error: 'Apenas comentários novos podem ser excluídos' });
+    }
+    
+    await Comment.findByIdAndDelete(commentId);
+    
+    res.json({ message: 'Comentário excluído com sucesso' });
+    
+    console.log(`Comentário ${commentId} excluído`);
+  } catch (err) {
+    console.error('Erro ao excluir comentário:', err);
+    res.status(500).json({ error: 'Falha ao excluir comentário' });
   }
 };
