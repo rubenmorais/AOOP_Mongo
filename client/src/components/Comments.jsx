@@ -246,7 +246,7 @@ const Comments = ({ movieId }) => {
           
           <div className="edit-buttons">
             <button type="submit" className="comment-button">
-              Salvar Alterações
+              Guardar Alterações
             </button>
             <button 
               type="button" 
@@ -296,7 +296,7 @@ const Comments = ({ movieId }) => {
                   onClick={() => handleDeleteComment(comment._id)}
                   disabled={editingComment !== null}
                 >
-                  Excluir
+                  Apagar
                 </button>
               </div>
             </div>
