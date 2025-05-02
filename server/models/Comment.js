@@ -27,10 +27,6 @@ const commentSchema = new mongoose.Schema({
     min: 1,
     max: 5,
     default: 5
-  },
-  isNew: {
-    type: Boolean,
-    default: true
   }
 }, { 
   versionKey: false,

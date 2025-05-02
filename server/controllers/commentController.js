@@ -38,7 +38,6 @@ export const addComment = async (req, res) => {
       text: content,
       date: new Date(),
       rating: Number(rating) || 5,
-      isNew: true
     });
     
     const savedComment = await newComment.save();
@@ -50,7 +49,6 @@ export const addComment = async (req, res) => {
       content: savedComment.text,
       rating: savedComment.rating,
       createdAt: savedComment.date,
-      isNew: savedComment.isNew
     });
     
     console.log(`Novo comentário adicionado para o filme ${movieId}`);
@@ -74,10 +72,6 @@ export const updateComment = async (req, res) => {
       return res.status(404).json({ error: 'Comentário não encontrado' });
     }
     
-    if (!comment.isNew) {
-      return res.status(403).json({ error: 'Apenas comentários novos podem ser editados' });
-    }
-    
     const updatedComment = await Comment.findByIdAndUpdate(
       commentId,
       { text: content, rating: Number(rating) || 5 },
@@ -90,8 +84,7 @@ export const updateComment = async (req, res) => {
       username: updatedComment.name,
       content: updatedComment.text,
       rating: updatedComment.rating,
-      createdAt: updatedComment.date,
-      isNew: updatedComment.isNew
+      createdAt: updatedComment.date
     });
     
     console.log(`Comentário ${commentId} atualizado`);
@@ -115,17 +108,13 @@ export const deleteComment = async (req, res) => {
       return res.status(404).json({ error: 'Comentário não encontrado' });
     }
     
-    if (!comment.isNew) {
-      return res.status(403).json({ error: 'Apenas comentários novos podem ser excluídos' });
-    }
-    
     await Comment.findByIdAndDelete(commentId);
     
     res.json({ message: 'Comentário excluído com sucesso' });
     
     console.log(`Comentário ${commentId} excluído`);
   } catch (err) {
-    console.error('Erro ao excluir comentário:', err);
-    res.status(500).json({ error: 'Falha ao excluir comentário' });
+    console.error('Erro ao apagar comentário:', err);
+    res.status(500).json({ error: 'Falha ao apagar comentário' });
   }
 };

@@ -86,10 +86,15 @@ const Comments = ({ movieId }) => {
         editFormData
       );
       
+      // Update the comments state with the edited comment
       setComments((prevComments) => 
         prevComments.map((comment) => 
           comment._id === editingComment._id 
-            ? { ...comment, text: response.data.content, rating: response.data.rating } 
+            ? { 
+                ...comment, 
+                text: response.data.content, 
+                rating: response.data.rating 
+              } 
             : comment
         )
       );
@@ -278,24 +283,22 @@ const Comments = ({ movieId }) => {
               </div>
               <p className="comment-content">{comment.content || comment.text}</p>
               
-              {comment.isNew && (
-                <div className="comment-actions">
-                  <button 
-                    className="action-button edit-button"
-                    onClick={() => startEditing(comment)}
-                    disabled={editingComment !== null}
-                  >
-                    Editar
-                  </button>
-                  <button 
-                    className="action-button delete-button"
-                    onClick={() => handleDeleteComment(comment._id)}
-                    disabled={editingComment !== null}
-                  >
-                    Excluir
-                  </button>
-                </div>
-              )}
+              <div className="comment-actions">
+                <button 
+                  className="action-button edit-button"
+                  onClick={() => startEditing(comment)}
+                  disabled={editingComment !== null}
+                >
+                  Editar
+                </button>
+                <button 
+                  className="action-button delete-button"
+                  onClick={() => handleDeleteComment(comment._id)}
+                  disabled={editingComment !== null}
+                >
+                  Excluir
+                </button>
+              </div>
             </div>
           ))          
         )}
