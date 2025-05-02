@@ -17,7 +17,7 @@ app.use(express.json());
 app.use('/api', apiRoutes);
 
 app.get('/', (req, res) => {
-  res.json({ message: 'API de Filmes está funcionando!' });
+  res.json({ message: 'API de Filmes está a funcionar!' });
 });
 
 app.listen(PORT, () => {
