@@ -15,7 +15,7 @@ const Comments = ({ movieId }) => {
     const fetchComments = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/movies/${movieId}/comments`);
+        const response = await axios.get(`${process.env.API_URL}/api/movies/${movieId}/comments`);
         setComments(response.data.comments);
         setError(null);
       } catch (err) {
@@ -42,7 +42,7 @@ const Comments = ({ movieId }) => {
     
     try {
       setLoading(true);
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/movies/${movieId}/comments`, newComment);
+      const response = await axios.post(`${process.env.API_URL}/api/movies/${movieId}/comments`, newComment);
       
       setComments((prevComments) => [response.data, ...prevComments]);
       

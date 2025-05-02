@@ -22,11 +22,11 @@ const Home = () => {
       setError(null);
       
       try {
-        let url = `${process.env.REACT_APP_API_URL}/api/movies`;
+        let url = `${process.env.API_URL}/api/movies`;
         const params = { page: currentPage };
         
         if (searchTerm) {
-          url = `${process.env.REACT_APP_API_URL}/api/movies/search`;
+          url = `${process.env.API_URL}/api/movies/search`;
           params.title = searchTerm;
         }
         
