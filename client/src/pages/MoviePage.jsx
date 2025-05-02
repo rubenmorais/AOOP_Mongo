@@ -15,7 +15,7 @@ const MoviePage = () => {
       setError(null);
       
       try {
-        const response = await axios.get(`/api/movies/${id}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/movies/${id}`);
         setMovie(response.data);
       } catch (err) {
         console.error('Erro ao buscar detalhes do filme:', err);
