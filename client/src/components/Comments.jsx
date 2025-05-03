@@ -276,7 +276,7 @@ const Comments = ({ movieId }) => {
               <div className="comment-header">
                 <span className="comment-author">{comment.username || comment.name}</span>
                 <span className="comment-date">
-                  {new Date(comment.createdAt || comment.date).toLocaleDateString('pt-BR')}
+                  {new Date(comment.createdAt || comment.date).toLocaleDateString('pt-PT')}
                 </span>
               </div>
               <div className="comment-rating">

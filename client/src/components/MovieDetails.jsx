@@ -32,7 +32,7 @@ const MovieDetails = ({ movie }) => {
             {movie.runtime && <span>{movie.runtime} min</span>}
             {movie.released && (
               <span>
-                {new Date(movie.released).toLocaleDateString('pt-BR')}
+                {new Date(movie.released).toLocaleDateString('pt-PT')}
               </span>
             )}
           </div>
