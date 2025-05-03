@@ -86,18 +86,19 @@ const Comments = ({ movieId }) => {
         editFormData
       );
       
-      // Update the comments state with the edited comment
       setComments((prevComments) => 
         prevComments.map((comment) => 
           comment._id === editingComment._id 
             ? { 
                 ...comment, 
-                text: response.data.content, 
-                rating: response.data.rating 
+                text: response.data.content || editFormData.content,
+                rating: response.data.rating || editFormData.rating 
               } 
             : comment
         )
       );
+      
+      fetchComments();
       
       setEditingComment(null);
       setEditFormData({ content: '', rating: 5 });

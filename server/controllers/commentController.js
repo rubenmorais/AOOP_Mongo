@@ -82,6 +82,7 @@ export const updateComment = async (req, res) => {
       _id: updatedComment._id,
       movieId: updatedComment.movie_id,
       username: updatedComment.name,
+      text: updatedComment.text,
       content: updatedComment.text,
       rating: updatedComment.rating,
       createdAt: updatedComment.date
