@@ -1,4 +1,5 @@
 import Movie from '../models/Movie.js';
+import EmbeddedMovie from '../models/EmbeddedMovie.js';
 
 export const getAllMovies = async (req, res) => {
   try {
@@ -29,12 +30,47 @@ export const getAllMovies = async (req, res) => {
 export const getMovieDetails = async (req, res) => {
   try {
     const movie = await Movie.findById(req.params.id);
-    
+
     if (!movie) {
       return res.status(404).json({ error: 'Filme não encontrado' });
     }
-    
-    res.json(movie);
+
+    const embedded = await EmbeddedMovie.findById(movie._id);
+    if (!embedded || !embedded.plot_embedding) {
+      return res.json({ movie, recommendations: [] });
+    }
+
+
+    const currentEmbedding = embedded.plot_embedding;
+
+    const similar = await EmbeddedMovie.aggregate([
+      {
+        $search: {
+          index: 'plot_vector_index',
+          knnBeta: {
+            vector: currentEmbedding,
+            path: 'plot_embedding',
+            k: 6
+          }
+        }
+      },
+      {
+        $match: {
+          movieId: { $ne: movie._id }
+        }
+      },
+      {
+        $limit: 5
+      }
+    ]);
+
+    const similarMovieIds = similar.map(doc => doc._id);
+
+    const recommendedMovies = await Movie.find({
+      _id: { $in: similarMovieIds }
+    }).select('title year poster genres imdb.rating');
+
+    res.json({ movie, recommendations: recommendedMovies });
   } catch (err) {
     console.error('Erro ao buscar detalhes do filme:', err);
     res.status(500).json({ error: 'Erro ao buscar detalhes do filme' });
