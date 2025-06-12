@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import MovieCard from '../components/MovieCard';
 import Pagination from '../components/Pagination';
+import ChatBot from '../components/ChatBot';
 
 const Home = () => {
   const [movies, setMovies] = useState([]);
@@ -11,6 +12,7 @@ const Home = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [totalMovies, setTotalMovies] = useState(0);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -45,6 +47,8 @@ const Home = () => {
     
     fetchMovies();
   }, [currentPage, searchTerm]);
+
+  const toggleChat = () => setIsChatOpen(!isChatOpen);
   
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -79,7 +83,8 @@ const Home = () => {
   }
   
   return (
-    <div className="container">
+  <>
+    <div className="container" style={{ position: 'relative' }}>
       <h1 style={{ marginBottom: '20px' }}>
         {searchTerm 
           ? `Resultados para: "${searchTerm}" (${totalMovies} filmes encontrados)`
@@ -106,8 +111,17 @@ const Home = () => {
           />
         </>
       )}
+      <button 
+        onClick={toggleChat} 
+        className="chat-button"
+        aria-label="Abrir chat de recomendações"
+      >
+        💬
+      </button>
+      {isChatOpen && <ChatBot onClose={() => setIsChatOpen(false)} />}
     </div>
-  );
+  </>
+);
 };
 
 export default Home;
