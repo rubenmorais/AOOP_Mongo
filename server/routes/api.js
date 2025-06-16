@@ -1,7 +1,7 @@
 import express from 'express';
 import { getAllMovies, getMovieDetails, searchMovies } from '../controllers/movieController.js';
 import { getMovieComments, addComment, updateComment, deleteComment } from '../controllers/commentController.js';
-import { processChatMessage, getEmbeddingBasedRecommendations } from '../controllers/chatController.js';
+import { processChatMessage, getEmbeddingBasedRecommendationsHandler } from '../controllers/chatController.js';
 
 const router = express.Router();
 
@@ -15,5 +15,5 @@ router.put('/comments/:commentId', updateComment);
 router.delete('/comments/:commentId', deleteComment);
 
 router.post('/chat/message', processChatMessage);
-router.post('/recommendations', getEmbeddingBasedRecommendations);
+router.post('/recommendations', getEmbeddingBasedRecommendationsHandler);
 export default router;

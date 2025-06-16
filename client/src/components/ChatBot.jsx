@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import MovieCard from './MovieCard';
+import MovieCardChat from './MovieCardChat';
+
 const ChatBot = ({ onClose }) => {
     const [messages, setMessages] = useState([
         { 
             from: 'bot',
-            text: '🎬 Olá! Sou o seu assistente de filmes. Posso recomendar filmes de comédia, drama, ação, terror e muito mais! O que você gostaria de assistir hoje?',
+            text: '🎬 Olá! Sou o teu assistente de filmes. Posso recomendar-te filmes de comédia, drama, ação, terror e muito mais! O que gostarias de ver hoje?',
             movies: []
         }
     ]);
@@ -65,35 +66,64 @@ const ChatBot = ({ onClose }) => {
     return (
         <div className="chat-modal">
             <div className="chat-header">
-                <span>🎬 Chat</span>
-                <button onClick={onClose} className="chat-close-btn">✖</button>
+                <span>🎬 Assistente de Filmes</span>
+                <button onClick={onClose} className="chat-close-btn" aria-label="Fechar chat">✖</button>
             </div>
-            <div className="chat-body" style={{ overflowY: 'auto', maxHeight: '400px' }}>
-            {messages.map((msg, i) => (
-            <div key={i} className={`chat-message ${msg.from}`}>
-                <p>{msg.text}</p>
-                {/* Aqui renderiza os filmes se existirem */}
-                {msg.movies.length > 0 && (
-                <div className="movies-list" style={{ marginTop: '10px' }}>
-                    {msg.movies.map(movie => (
-                    <MovieCard key={movie._id} movie={movie} />
-                    ))}
-                </div>
+            
+            <div className="chat-body">
+                {messages.map((msg, i) => (
+                    <div key={i} className={`chat-message ${msg.from}`}>
+                        <div className="message-content">
+                            <p>{msg.text}</p>
+                            {msg.movies.length > 0 && (
+                                <div className="movies-container">
+                                    <div className="movies-count">
+                                        {msg.movies.length} filme{msg.movies.length !== 1 ? 's' : ''} encontrado{msg.movies.length !== 1 ? 's' : ''}:
+                                    </div>
+                                    <div className="movies-list">
+                                        {msg.movies.map(movie => (
+                                            <MovieCardChat key={movie._id} movie={movie} />
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                ))}
+                
+                {isLoading && (
+                    <div className="chat-message bot">
+                        <div className="message-content">
+                            <div className="typing-indicator">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
                 )}
+                
+                <div ref={messagesEndRef} />
             </div>
-            ))}
-            <div ref={messagesEndRef} />
-        </div>
-        <div className="chat-input-area">
-            <input 
-            type="text"
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Escreva a sua pergunta..."
-            />
-            <button onClick={handleSend}>Enviar</button>
-        </div>
+            
+            <div className="chat-input-area">
+                <input 
+                    type="text"
+                    value={input}
+                    onChange={e => setInput(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Que tipo de filme procuras?"
+                    disabled={isLoading}
+                    className={isLoading ? 'input-disabled' : ''}
+                />
+                <button 
+                    onClick={handleSend} 
+                    disabled={!input.trim() || isLoading}
+                    className={!input.trim() || isLoading ? 'button-disabled' : ''}
+                >
+                    {isLoading ? '...' : 'Enviar'}
+                </button>
+            </div>
         </div>
     );
 };
