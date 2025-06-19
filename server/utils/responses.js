@@ -1,13 +1,13 @@
 // Função para gerar resposta quando não entende
 export const generateDontUnderstandResponse = () => {
   const responses = [
-    "Desculpa, não consegui perceber o que queres! 🤔\nPodes perguntar algo como:\n• 'Quero ver uma comédia'\n• 'Filmes de ação populares'\n• 'Algo parecido com Inception'",
+    "Desculpa, não consegui perceber o que queres! 🤔<br>Podes perguntar algo como:<br>• 'Quero ver uma comédia'<br>• 'Filmes de ação populares'<br>• 'Algo parecido com Inception'",
     
-    "Hmm, não entendi bem a tua pergunta! 😅\nTenta algo como:\n• 'Recomenda-me um filme de terror'\n• 'Filmes de 1995'\n• 'Comédias para rir'",
+    "Hmm, não entendi bem a tua pergunta! 😅<br>Tenta algo como:<br>• 'Recomenda-me um filme de terror'<br>• 'Filmes de 1995'<br>• 'Comédias para rir'",
     
-    "Não consegui entender! Podes ser mais específico? 🎬\nExemplos:\n• 'Filmes curtos para o jantar'\n• 'Dramas bem avaliados'\n• 'Animações para crianças'",
+    "Não consegui entender! Podes ser mais específico? 🎬<br>Exemplos:<br>• 'Filmes curtos para o jantar'<br>• 'Dramas bem avaliados'<br>• 'Animações para crianças'",
     
-    "Não percebi bem! 🤷‍♂️\nTenta perguntar sobre:\n• Géneros (comédia, ação, drama...)\n• Filmes populares ou recentes\n• Algo similar a um filme que gostaste"
+    "Não percebi bem! 🤷‍♂️<br>Tenta perguntar sobre:<br>• Géneros (comédia, ação, drama...)<br>• Filmes populares ou recentes<br>• Algo similar a um filme que gostaste"
   ];
   
   return responses[Math.floor(Math.random() * responses.length)];
