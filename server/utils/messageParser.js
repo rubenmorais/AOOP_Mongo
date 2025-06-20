@@ -48,7 +48,7 @@ export const parseUserMessage = (message) => {
     ],
     recent: [
       'recente', 'novo', 'novos', 'lançamento', 'lancamento', 'último', 'ultimo', 
-      'atual', 'este ano', 'ano passado', '2024', '2023', '2022', '2021', '2020'
+      'atual', 'este ano', 'ano passado'
     ],
     classic: [
       'clássico', 'classico', 'antigo', 'vintage', 'cult', 'retro', 'década', 

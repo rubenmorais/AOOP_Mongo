@@ -93,7 +93,7 @@ const ChatBot = ({ onClose }) => {
                 {messages.map((msg, i) => (
                     <div key={i} className={`chat-message ${msg.from}`}>
                         <div className="message-content">
-                           <p style={{whiteSpace: 'pre-line'}}>{msg.text}</p>
+                           <p dangerouslySetInnerHTML={{ __html: msg.text }} />
                             {msg.movies.length > 0 && (
                                 <div className="movies-container">
                                     <div className="movies-count">
