@@ -32,8 +32,8 @@ export const processChatMessage = async (req, res) => {
     console.log('Parsed message:', JSON.stringify(parsed, null, 2));
     
     // Respostas para cumprimentos e agradecimentos
-    const greetings = ['olá', 'ola', 'hey', 'bom dia', 'boa tarde', 'boa noite', 'hello'];
-    const thanks = ['obrigado', 'obrigada', 'valeu', 'thanks', 'thank you'];
+    const greetings = ['olá', 'ola', 'hey', 'bom dia', 'boa tarde', 'boa noite', 'hello', "boas"];
+    const thanks = ['obrigado', 'obrigada', 'thanks', 'thank you'];
     
     if (greetings.some(greeting => parsed.originalMessage.toLowerCase().includes(greeting))) {
       return res.json({
@@ -82,7 +82,7 @@ export const processChatMessage = async (req, res) => {
         console.log('Referenced movie not found:', parsed.referencedMovie);
         // Se não encontrou o filme específico, tentar buscar por gênero
         const genreQuery = {
-          genres: { $in: ['Drama', 'Thriller', 'Mystery'] }, // Gêneros comuns para filmes similares
+          genres: { $in: ['Drama', 'Thriller', 'Mystery'] }, 
           'imdb.rating': { $gte: 6.0 }
         };
         
@@ -99,7 +99,6 @@ export const processChatMessage = async (req, res) => {
       }
     }
 
-    // Buscar filmes usando o serviço
     const movies = await searchMovies(parsed);
     console.log(`Found ${movies.length} movies`);
 
@@ -131,13 +130,11 @@ export const getEmbeddingBasedRecommendationsHandler = async (req, res, provided
       } else {
         const parsed = parseUserMessage(message);
         
-        // Se menciona um filme específico, procurar por ele
         if (parsed.referencedMovie) {
           console.log('Searching for movie in embedding handler:', parsed.referencedMovie);
           seedMovie = await findReferencedMovie(parsed.referencedMovie);
         }
         
-        // Se não encontrou filme específico, usar géneros para encontrar seed
         if (!seedMovie && parsed.genres.length > 0) {
           console.log('No specific movie found, looking for seed by genre:', parsed.genres);
           const seedQuery = {
@@ -196,7 +193,7 @@ export const getHybridRecommendations = async (req, res) => {
     if (parsed.referencedMovie && parsed.wantsSimilar) {
       const embeddedCount = await EmbeddedMovie.countDocuments();
       if (embeddedCount > 0) {
-        console.log('Tentando recomendações por embedding para filme específico...');
+        console.log('Tentar recomendações por embedding para filme específico...');
         return getEmbeddingBasedRecommendationsHandler(req, res);
       }
     }
@@ -205,12 +202,12 @@ export const getHybridRecommendations = async (req, res) => {
     if (parsed.genres.length > 0) {
       const embeddedCount = await EmbeddedMovie.countDocuments();
       if (embeddedCount > 0) {
-        console.log('Tentando recomendações por embedding...');
+        console.log('Tentar recomendações por embedding...');
         return getEmbeddingBasedRecommendationsHandler(req, res);
       }
     }
     
-    console.log('Usando método tradicional de recomendações');
+    console.log('Usar método tradicional de recomendações');
     return processChatMessage(req, res);
     
   } catch (err) {

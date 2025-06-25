@@ -6,8 +6,8 @@ export const isValidMovieQuery = (message) => {
     return false;
   }
   
-  // Verificar se tem muitos caracteres consecutivos iguais (spam)
-  const hasSpam = /(.)\1{4,}/.test(lowerMessage); // 5+ caracteres iguais seguidos
+  // Verificar se tem muitos caracteres consecutivos iguais 
+  const hasSpam = /(.)\1{4,}/.test(lowerMessage); 
   if (hasSpam) {
     return false;
   }
@@ -15,11 +15,11 @@ export const isValidMovieQuery = (message) => {
   // Verificar se tem uma proporção alta de caracteres sem sentido
   const randomChars = lowerMessage.match(/[^a-záàâãéêíóôõúçñ\s\d]/g);
   const randomCharRatio = randomChars ? randomChars.length / lowerMessage.length : 0;
-  if (randomCharRatio > 0.3) { // Mais de 30% caracteres estranhos
+  if (randomCharRatio > 0.3) { 
     return false;
   }
   
-  // Verificar se tem pelo menos algumas palavras válidas relacionadas com filmes ou português
+  // Verificar se tem pelo menos algumas palavras válidas relacionadas com filmes 
   const movieKeywords = [
     // Géneros
     'comédia', 'comedy', 'comedia', 'humor', 'engraçado', 'diversão',

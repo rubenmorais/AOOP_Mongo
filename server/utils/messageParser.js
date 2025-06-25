@@ -77,7 +77,7 @@ export const parseUserMessage = (message) => {
     }
   }
 
-  // Detectar géneros
+  // Detetar géneros
   const detectedGenres = [];
   Object.entries(genreMap).forEach(([pt, en]) => {
     if (lowerMessage.includes(pt)) {
@@ -85,7 +85,7 @@ export const parseUserMessage = (message) => {
     }
   });
 
-  // Detectar preferências de duração
+  // Detetar preferências de duração
   let durationPreference = null;
   if (lowerMessage.includes('curto') || lowerMessage.includes('rápido') || 
       lowerMessage.includes('jantar') || lowerMessage.includes('breve') ||
@@ -97,7 +97,7 @@ export const parseUserMessage = (message) => {
     durationPreference = 'long';
   }
 
-  // Detectar intenções
+  // Detetar intenções
   const isAskingForRecommendations = intentKeywords.recommendations.some(keyword => 
     lowerMessage.includes(keyword)
   ) || durationPreference !== null
@@ -118,7 +118,7 @@ export const parseUserMessage = (message) => {
     lowerMessage.includes(keyword)
   );
 
-  // Detectar mood - MELHORADO para capturar mais expressões
+  // Detetar mood 
   let detectedMood = null;
   const moodKeywords = {
     happy: [
@@ -160,7 +160,7 @@ export const parseUserMessage = (message) => {
     }
   });
 
-  // Detectar décadas
+  // Detetar décadas
   const decadeMatch = lowerMessage.match(/anos?\s*(\d{2})/);
   let decade = null;
   if (decadeMatch) {
@@ -172,15 +172,15 @@ export const parseUserMessage = (message) => {
     }
   }
 
-  // Detectar anos específicos
+  // Detetar anos específicos
   const yearMatch = lowerMessage.match(/\b(19|20)\d{2}\b/);
   const year = yearMatch ? parseInt(yearMatch[0]) : null;
 
-  // Detectar rating mínimo
+  // Detetar rating mínimo
   const ratingMatch = lowerMessage.match(/nota (?:mínima\s*de\s*)?(\d+(?:[.,]\d+)?)/);
   const minRating = ratingMatch ? parseFloat(ratingMatch[1].replace(',', '.')) : null;
 
-  // Se detectou mood, marcar como pedindo recomendações
+  // Se detetou mood, marcar como pedindo recomendações
   if (detectedMood && !isAskingForRecommendations) {
     const moodBasedRecommendation = true;
   }

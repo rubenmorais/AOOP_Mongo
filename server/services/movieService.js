@@ -4,14 +4,10 @@ import EmbeddedMovie from '../models/EmbeddedMovie.js';
 export const findReferencedMovie = async (movieTitle) => {
   if (!movieTitle) return null;
 
-  console.log('Procurando filme:', movieTitle);
-
   // Limpar o título mantendo caracteres especiais importantes
   const cleanTitle = movieTitle
     .replace(/[^\w\s:.-]/g, '') // Remove caracteres especiais exceto : . -
     .trim();
-  
-  console.log('Título limpo:', cleanTitle);
   
   // Buscar por título exato
   let movie = await Movie.findOne({
@@ -20,7 +16,6 @@ export const findReferencedMovie = async (movieTitle) => {
 
   // Se não encontrar, buscar por correspondência parcial
   if (!movie) {
-    console.log('Título exato não encontrado, tentando busca parcial...');
     // Dividir o título em palavras para busca mais flexível
     const words = cleanTitle.split(/\s+/);
     const searchTerms = words.filter(word => word.length > 2); // Ignorar palavras muito curtas
@@ -64,7 +59,7 @@ export const buildMovieQuery = (parsed) => {
   query.title = { $exists: true, $ne: null };
   query.year = { $exists: true, $type: "number" };
 
-  // Filtrar por mood primeiro (isto é o que estava em falta!)
+  // Filtrar por mood primeiro 
   if (parsed.mood) {
     switch (parsed.mood) {
       case 'happy':
@@ -146,8 +141,6 @@ export const buildMovieQuery = (parsed) => {
 
 export const searchMovies = async (parsed) => {
   const { query, sortCriteria } = buildMovieQuery(parsed);
-
-  console.log('Query sendo executada:', JSON.stringify(query, null, 2));
 
   let movies = await Movie.find(query)
     .sort(sortCriteria)
