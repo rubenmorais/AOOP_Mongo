@@ -1,0 +1,45 @@
+.recommendations-container {
+  margin-top: 30px;
+  padding: 20px;
+  width: 100%;
+}
+
+.recommendations-title {
+  color: #032541;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.recommendations-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px; 
+}
+
+.movie-card {
+  flex: 1 0 200px; 
+  max-width: 200px;
+}
+
+
+.recommendation-item {
+  min-width: 140px;
+  flex-shrink: 0;
+  text-decoration: none;
+  color: #333;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  transition: transform 0.2s ease;
+}
+
+
+.recommendation-title {
+  margin: 0.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

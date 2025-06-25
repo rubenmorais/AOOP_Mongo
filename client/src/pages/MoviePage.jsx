@@ -5,6 +5,7 @@ import MovieDetails from '../components/MovieDetails';
 
 const MoviePage = () => {
   const [movie, setMovie] = useState(null);
+  const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { id } = useParams();
@@ -16,7 +17,8 @@ const MoviePage = () => {
       
       try {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/movies/${id}`);
-        setMovie(response.data);
+        setMovie(response.data.movie);
+        setRecommendations(response.data.recommendations || []);
       } catch (err) {
         console.error('Erro ao buscar detalhes do filme:', err);
         if (err.response && err.response.status === 404) {
@@ -56,7 +58,7 @@ const MoviePage = () => {
   
   return (
     <div className="container">
-      {movie && <MovieDetails movie={movie} />}
+      <MovieDetails movie={movie} recommendations={recommendations} />
     </div>
   );
 };

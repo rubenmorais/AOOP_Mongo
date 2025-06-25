@@ -38,7 +38,7 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://aoop-mongo-backend.onrender.com",
+  "proxy": "http://localhost:5000",
   "devDependencies": {
     "cross-env": "^7.0.3"
   }

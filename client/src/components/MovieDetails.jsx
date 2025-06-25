@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Comments from './Comments';
+import Recommendations from './Recommendations';
 
-const MovieDetails = ({ movie }) => {
+const MovieDetails = ({ movie, recommendations }) => {
   const fallbackImage = '/no-poster.jpg';
   
   return (
@@ -101,6 +102,7 @@ const MovieDetails = ({ movie }) => {
           )}
         </div>
       </div>
+      <Recommendations movies={recommendations} />
       <Comments movieId={movie._id} />
     </div>
   );
