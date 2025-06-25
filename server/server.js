@@ -12,7 +12,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors({
-  origin: 'http://localhost:3000'
+  origin: 'https://aoop-mongo-frontend-28974.onrender.com'
 }));
 
 app.use(express.json());
