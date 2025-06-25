@@ -64,4 +64,10 @@ npm start
 A aplicação ficará disponível localmente e pronta a utilizar.
 
 ---
+## Deploy
 
+A aplicação está disponível online e pode ser acedida através do seguinte link:
+
+- **Frontend (ChatBot e interface de filmes)**: [https://aoop-mongo-frontend-28974.onrender.com/](https://aoop-mongo-frontend-28974.onrender.com/)
+
+---
