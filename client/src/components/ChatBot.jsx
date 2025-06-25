@@ -43,7 +43,7 @@ const ChatBot = ({ onClose }) => {
         setShowQuickQuestions(false);
 
         try {
-            const response = await fetch('/api/chat/message', {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/chat/message`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
